@@ -1,0 +1,3 @@
+[submodule "others/golang-examples"]
+	path = others/golang-examples
+	url = https://github.com/SimonWaldherr/golang-examples.git
