@@ -1,0 +1,3 @@
+form-urlencoded: 		Bind - Form - defaultFormBinder - bindForm(req, userStruct, req.Form, nil, errs)
+json: 					Bind - Json - defaultJsonBinder -
+multipart/form-data:	Bind - MultipartForm - defaultMultipartFormBinder - bindForm(req, userStruct, req.MultipartForm.Value, req.MultipartForm.File, errs)
