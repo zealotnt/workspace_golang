@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"image/png"
 	"io/ioutil"
 
@@ -11,14 +12,17 @@ import (
 func GetThumbnail(file string, size int) []byte {
 	srcImage, err := imaging.Open(file)
 	if err != nil {
+		fmt.Println(err)
 		return nil
 	}
 
-	dstImage := imaging.Fit(srcImage, size, size, imaging.Lanczos)
+	dstImage := imaging.Fill(srcImage, size, size, imaging.Center, imaging.Lanczos)
+	// dstImage := imaging.Fit(srcImage, size, size, imaging.Lanczos)
 
 	dataBytes := new(bytes.Buffer)
 
 	if err := png.Encode(dataBytes, dstImage); err != nil {
+		fmt.Println(err)
 		return nil
 	}
 
@@ -28,6 +32,7 @@ func GetThumbnail(file string, size int) []byte {
 func GetDetail(file string, size int) []byte {
 	srcImage, err := imaging.Open(file)
 	if err != nil {
+		fmt.Println(err)
 		return nil
 	}
 
@@ -36,6 +41,7 @@ func GetDetail(file string, size int) []byte {
 	dataBytes := new(bytes.Buffer)
 
 	if err := png.Encode(dataBytes, dstImage); err != nil {
+		fmt.Println(err)
 		return nil
 	}
 
@@ -43,7 +49,7 @@ func GetDetail(file string, size int) []byte {
 }
 
 func main() {
-	path := string("./golang_big.png")
+	path := string("./1.jpg")
 	thumbnail := GetThumbnail(path, 320)
 	detail := GetDetail(path, 550)
 	ioutil.WriteFile("thumbnail.png", thumbnail, 0777)
