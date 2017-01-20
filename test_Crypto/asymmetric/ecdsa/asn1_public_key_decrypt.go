@@ -6,6 +6,7 @@ import (
 	"crypto/elliptic"
 	"encoding/asn1"
 	"fmt"
+	"math/big"
 )
 
 func main() {
@@ -24,16 +25,34 @@ func main() {
 		return
 	}
 
-	pubKey, err := getPublic(ecp)
+	pubKey, X, Y, err := getPublic(ecp)
 	if err != nil {
 		fmt.Printf("Failed to decode public key (%s)", err.Error())
 		return
 	}
 
-	fmt.Printf("Public key: %#v", pubKey)
+	fmt.Printf("ECDSA point:\r\n\tvalue=%#v\r\n\tlen=%#v\r\n\r\n", ecp, len(ecp))
+	fmt.Printf("Public key:\r\n\t%#v\r\n\r\n", pubKey)
+	fmt.Printf("X []byte:\r\n\tvalue=%#v\r\n\tlen=%#v\r\n\r\n", X, len(X))
+	fmt.Printf("Y []byte:\r\n\tvalue=%#v\r\n\tlen=%#v\r\n\r\n", Y, len(Y))
+
+	X_recal := big.NewInt(0)
+	max_len := len(X) - 1
+	for idx, value := range X {
+		shift_val := big.NewInt(0)
+		shift_val.Exp(big.NewInt(2), big.NewInt(int64((max_len - idx)*8)), nil)
+
+		value_big := big.NewInt(0)
+		value_big.Mul(big.NewInt(int64(value)), shift_val)
+
+		X_recal.Add(X_recal, value_big)
+	}
+	fmt.Printf("X recal=\r\n\t%#v\r\n", X_recal)
+	X_recal.SetBytes(X)
+	fmt.Printf("X SetBytes=\r\n\t%#v\r\n", X_recal)
 }
 
-func getPublic(point []byte) (pub crypto.PublicKey, err error) {
+func getPublic(point []byte) (pub crypto.PublicKey, X []byte, Y []byte, err error) {
 	var ecdsaPub ecdsa.PublicKey
 
 	ecdsaPub.Curve = elliptic.P256()
@@ -47,11 +66,14 @@ func getPublic(point []byte) (pub crypto.PublicKey, err error) {
 		err = fmt.Errorf("Failed to decode CKA_EC_POINT")
 		return
 	}
+
 	if !ecdsaPub.Curve.IsOnCurve(ecdsaPub.X, ecdsaPub.Y) {
 		err = fmt.Errorf("Public key is not on Curve")
 		return
 	}
 
 	pub = &ecdsaPub
+	X = ecdsaPub.X.Bytes()
+	Y = ecdsaPub.Y.Bytes()
 	return
 }
