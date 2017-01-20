@@ -8,14 +8,49 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"hash"
 	"io"
 	"io/ioutil"
 	"math/big"
 	"os"
+
 	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
+	"github.com/davecgh/go-spew/spew"
 )
+
+func printHex(mesg string, bytes []byte) {
+	fmt.Printf(mesg)
+
+	for idx, val := range(bytes) {
+		if (idx % 8 == 0) && (idx != 0) {
+			fmt.Printf("\r\n\t")
+		}
+		fmt.Printf("0x%02x, ", val)
+	}
+
+	fmt.Printf("\r\n\r\n")
+}
+
+func recalculateBigInt(bytes []byte) (ret big.Int) {
+	big_cal := big.NewInt(0)
+	max_len := len(bytes) - 1
+	for idx, value := range bytes {
+		// shift_val = 2^(8*idx)
+		shift_val := big.NewInt(0)
+		shift_val.Exp(big.NewInt(2), big.NewInt(int64((max_len - idx)*8)), nil)
+
+		// value_big = value << (8*idx)
+		//           = value * 2^(8*idx)
+		//           = value * shift_val
+		value_big := big.NewInt(0)
+		value_big.Mul(big.NewInt(int64(value)), shift_val)
+
+		// total = total + new_val
+		(*big_cal).Add(big_cal, value_big)
+	}
+
+	return *big_cal
+}
 
 func main() {
 	spew.Config.Indent = "\t"
@@ -26,6 +61,9 @@ func main() {
 
 	fmt.Printf("Private Key :")
 	spew.Dump(privatekey)
+
+	printHex("Pub_X:\r\n\t", pubkey.X.Bytes())
+	printHex("Pub_Y:\r\n\t", pubkey.Y.Bytes())
 
 	// Sign ecdsa style
 	var h hash.Hash
@@ -42,40 +80,28 @@ func main() {
 		os.Exit(1)
 	}
 
-	signature := r.Bytes()
-	signature = append(signature, s.Bytes()...)
+	signature_r := r.Bytes()
+	signature_s := s.Bytes()
 
 	fmt.Println("Signature :")
-	r_cal := big.NewInt(0)
-	s_cal := big.NewInt(0)
-	// this recalculated code hasn't worked yet
-	for idx, value := range signature {
-		if idx < len(r.Bytes()) {
-			// shift_val = 2^(8*idx)
-			shift_val := big.NewInt(0)
-			shift_val.Exp(big.NewInt(2), big.NewInt(int64(idx*8)), nil)
+	r_cal := recalculateBigInt(signature_r)
+	s_cal := recalculateBigInt(signature_s)
 
-			// value_big = value << (8*idx)
-			//           = value * 2^(8*idx)
-			//           = value * shift_val
-			value_big := big.NewInt(0)
-			value_big.Mul(big.NewInt(int64(value)), shift_val)
-
-			// total = total + new_val
-			(*r_cal).Add(r_cal, value_big)
-		} else {
-			(*s_cal).Add(big.NewInt(0), big.NewInt(int64(value)))
-		}
-	}
-	fmt.Println("r: ")
+	fmt.Printf("r:\r\n\t")
 	spew.Dump(r)
-	fmt.Println("r_cal: ")
+	fmt.Printf("r_cal:\r\n\t")
 	spew.Dump(r_cal)
-	fmt.Println("s: ")
+	fmt.Printf("signature_r:\r\n\t")
+	spew.Dump(signature_r)
+	printHex("signature_r_hex_c:\r\n\t", signature_r)
+
+	fmt.Printf("s:\r\n\t")
 	spew.Dump(s)
-	fmt.Println("s_cal: ")
+	fmt.Printf("s_cal:\r\n\t")
 	spew.Dump(s_cal)
-	spew.Dump(signature)
+	fmt.Printf("signature_s:\r\n\t")
+	spew.Dump(signature_s)
+	printHex("signature_s_hex_c:\r\n\t", signature_s)
 
 	// Verify
 	verifystatus := ecdsa.Verify(&pubkey, signhash, r, s)
