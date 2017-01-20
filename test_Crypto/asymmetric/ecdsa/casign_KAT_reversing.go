@@ -31,6 +31,12 @@ func ReturnFixPublicKey(X_bytes []byte, Y_bytes []byte) *ecdsa.PublicKey {
 	ecdsa_PubKey.X.SetBytes(X_bytes)
 	ecdsa_PubKey.Y.SetBytes(Y_bytes)
 
+	test_X := big.NewInt(0)
+	test_X.SetBytes(X_bytes)
+	test_Y := big.NewInt(0)
+	test_Y.SetBytes(Y_bytes)
+	fmt.Println("On curve =>", elliptic.P256().IsOnCurve(test_X, test_Y))
+
 	return &ecdsa_PubKey
 }
 
@@ -59,8 +65,8 @@ func main() {
 
 	r_KAT_signature = revertEndianess(r_KAT_signature)
 	s_KAT_signature = revertEndianess(s_KAT_signature)
-	x_pubkey = revertEndianess(x_pubkey)
-	y_pubkey = revertEndianess(y_pubkey)
+	// x_pubkey = revertEndianess(x_pubkey)
+	// y_pubkey = revertEndianess(y_pubkey)
 
 	pubkey := ReturnFixPublicKey(x_pubkey, y_pubkey)
 	spew.Dump(pubkey)
