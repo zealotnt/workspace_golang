@@ -18,17 +18,18 @@ import (
 	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
 )
 
-func printHex(mesg string, bytes []byte) {
+func printHex(mesg string, variable_type string, variable_name string, bytes []byte) {
 	fmt.Printf(mesg)
 
+	fmt.Printf("%s %s[] = {\r\n\t\t", variable_type, variable_name)
 	for idx, val := range bytes {
 		if (idx%8 == 0) && (idx != 0) {
-			fmt.Printf("\r\n\t")
+			fmt.Printf("\r\n\t\t")
 		}
 		fmt.Printf("0x%02x, ", val)
 	}
 
-	fmt.Printf("\r\n\r\n")
+	fmt.Printf("\r\n\t};\r\n\r\n")
 }
 
 func recalculateBigInt(bytes []byte) (ret big.Int) {
@@ -62,8 +63,8 @@ func main() {
 	fmt.Printf("Private Key :")
 	spew.Dump(privatekey)
 
-	printHex("Pub_X:\r\n\t", pubkey.X.Bytes())
-	printHex("Pub_Y:\r\n\t", pubkey.Y.Bytes())
+	printHex("Pub_X:\r\n\t", "u8", "xq3", pubkey.X.Bytes())
+	printHex("Pub_Y:\r\n\t", "u8", "yq3", pubkey.Y.Bytes())
 
 	// Sign ecdsa style
 	var h hash.Hash
@@ -93,7 +94,7 @@ func main() {
 	spew.Dump(r_cal)
 	fmt.Printf("signature_r:\r\n\t")
 	spew.Dump(signature_r)
-	printHex("signature_r_hex_c:\r\n\t", signature_r)
+	printHex("signature_r_hex_c:\r\n\t", "u8", "r3", signature_r)
 
 	fmt.Printf("s:\r\n\t")
 	spew.Dump(s)
@@ -101,7 +102,7 @@ func main() {
 	spew.Dump(s_cal)
 	fmt.Printf("signature_s:\r\n\t")
 	spew.Dump(signature_s)
-	printHex("signature_s_hex_c:\r\n\t", signature_s)
+	printHex("signature_s_hex_c:\r\n\t", "u8", "s3", signature_s)
 
 	// Verify
 	verifystatus := ecdsa.Verify(&pubkey, signhash, r, s)
