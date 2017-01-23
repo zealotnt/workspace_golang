@@ -54,7 +54,6 @@ import (
 // 	return source[:lastIndex]
 // }
 
-
 func main() {
 	scores := make([]int, 100)
 	for i := 0; i < 100; i++ {

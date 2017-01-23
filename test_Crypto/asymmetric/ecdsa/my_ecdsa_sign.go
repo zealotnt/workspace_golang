@@ -14,15 +14,15 @@ import (
 	"math/big"
 	"os"
 
-	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
 	"github.com/davecgh/go-spew/spew"
+	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
 )
 
 func printHex(mesg string, bytes []byte) {
 	fmt.Printf(mesg)
 
-	for idx, val := range(bytes) {
-		if (idx % 8 == 0) && (idx != 0) {
+	for idx, val := range bytes {
+		if (idx%8 == 0) && (idx != 0) {
 			fmt.Printf("\r\n\t")
 		}
 		fmt.Printf("0x%02x, ", val)
@@ -37,7 +37,7 @@ func recalculateBigInt(bytes []byte) (ret big.Int) {
 	for idx, value := range bytes {
 		// shift_val = 2^(8*idx)
 		shift_val := big.NewInt(0)
-		shift_val.Exp(big.NewInt(2), big.NewInt(int64((max_len - idx)*8)), nil)
+		shift_val.Exp(big.NewInt(2), big.NewInt(int64((max_len-idx)*8)), nil)
 
 		// value_big = value << (8*idx)
 		//           = value * 2^(8*idx)

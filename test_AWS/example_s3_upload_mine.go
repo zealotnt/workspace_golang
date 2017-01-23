@@ -11,7 +11,7 @@ import (
 
 func myS3Upload(key string, data []byte) (*s3manager.UploadOutput, error) {
 	uploader := s3manager.NewUploader(session.New(&aws.Config{Region: aws.String(os.Getenv("S3_REGION"))}))
-	
+
 	return uploader.Upload(&s3manager.UploadInput{
 		Body:   bytes.NewReader(data),
 		Bucket: aws.String((os.Getenv("S3_BUCKET_NAME"))),

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"time"
 	"fmt"
 	"strconv"
+	"time"
 )
 
 func main() {

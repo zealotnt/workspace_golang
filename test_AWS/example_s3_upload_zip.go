@@ -28,7 +28,7 @@ func main() {
 		gw.Close()
 		writer.Close()
 	}()
-	
+
 	uploader := s3manager.NewUploader(session.New(&aws.Config{Region: aws.String("ap-southeast-1")}))
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Body:   reader,

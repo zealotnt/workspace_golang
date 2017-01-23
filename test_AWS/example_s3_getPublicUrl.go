@@ -34,18 +34,18 @@ func main() {
 	svc := s3.New(session.New(&aws.Config{Region: aws.String(os.Getenv("S3_REGION"))}))
 
 	params := &s3.PutObjectAclInput{
-		Bucket: aws.String(os.Getenv("S3_BUCKET_NAME")), // Required
-		Key:    aws.String("products/39/origin.1461171263"),  // Required
+		Bucket: aws.String(os.Getenv("S3_BUCKET_NAME")),     // Required
+		Key:    aws.String("products/39/origin.1461171263"), // Required
 		// ACL:    aws.String("public-read"),
 		AccessControlPolicy: &s3.AccessControlPolicy{
 			Grants: []*s3.Grant{
 				{ // Required
 					Grantee: &s3.Grantee{
-						Type:         aws.String("Group"), // Required
+						Type: aws.String("Group"), // Required
 						// DisplayName:  aws.String("DisplayName"),
 						// EmailAddress: aws.String("EmailAddress"),
 						// ID:           aws.String("ID"),
-						URI:          aws.String("http://acs.amazonaws.com/groups/global/AllUsers"),
+						URI: aws.String("http://acs.amazonaws.com/groups/global/AllUsers"),
 					},
 					Permission: aws.String("FULL_CONTROL"),
 				},

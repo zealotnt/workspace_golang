@@ -1,17 +1,15 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/lib/pq"
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 	"log"
 )
 
 func main() {
 	queryPostgres := true
-	
-
 
 	fmt.Println("1. Open postgres db")
 	db, err := sql.Open("postgres", "postgres://ukwklxchohiwrt:m_9V5QFtURhM6JKjlkBAVyNvvm@ec2-54-83-202-64.compute-1.amazonaws.com:5432/dbbpbsb92frcn6")
@@ -21,9 +19,9 @@ func main() {
 	err = db.Ping()
 	checkErr(err)
 
-	if (queryPostgres == true) {
+	if queryPostgres == true {
 		var (
-			id int
+			id   int
 			city string
 		)
 

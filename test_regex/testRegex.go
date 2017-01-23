@@ -19,8 +19,8 @@ func main() {
 	// Will print 'Match'
 	if r.MatchString(DATABASE_URL) == true {
 		fmt.Printf("Match \r\n")
-		fmt.Printf("%v" + "\r\n", r.FindAllString((DATABASE_URL), -1))
-		fmt.Printf("%v" + "\r\n", r.FindAllStringIndex((DATABASE_URL), -1))
+		fmt.Printf("%v"+"\r\n", r.FindAllString((DATABASE_URL), -1))
+		fmt.Printf("%v"+"\r\n", r.FindAllStringIndex((DATABASE_URL), -1))
 
 	} else {
 		fmt.Printf("No match ")
@@ -31,7 +31,7 @@ func main() {
 	//[[cat c] [sat s] [mat m]]
 	re, err := regexp.Compile(`(.)at`) // want to know what is in front of 'at'
 	res := re.FindAllStringSubmatch("The cat sat on the mat.", -1)
-	fmt.Printf("%v" + "\r\n", res)
+	fmt.Printf("%v"+"\r\n", res)
 	fmt.Println(res[1][0])
 
 	fmt.Println("2.2. More than one group:")
@@ -44,7 +44,7 @@ func main() {
 	fmt.Println("2.3. Empty result group:")
 	s = "Mr. Leonard Spock"
 	re1, err = regexp.Compile(`(Mr)(s)?\. (\w+) (\w+)`)
-	result:= re1.FindStringSubmatch(s)
+	result := re1.FindStringSubmatch(s)
 
 	for k, v := range result {
 		fmt.Printf("%d. %s\n", k, v)
@@ -54,11 +54,9 @@ func main() {
 	// 1. Mr
 	// 2.
 	// 3. Leonard
-	// 4. Spock	
+	// 4. Spock
 	result_slice = re1.FindAllStringSubmatch(s, -1)
 	fmt.Printf("%v\n", result_slice)
-
-
 
 	fmt.Println("Let do our exercise:")
 	fmt.Printf("%s \r\n", DATABASE_URL)
@@ -67,7 +65,7 @@ func main() {
 	for k, v := range result {
 		fmt.Printf("%d. %s\n", k, v)
 	}
-	
+
 	if result != nil {
 		fmt.Printf("%s", result[1])
 	} else {

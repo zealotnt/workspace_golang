@@ -20,7 +20,7 @@ func myS3Download(key string) ([]byte, error) {
 		&s3.GetObjectInput{
 			Bucket: aws.String((os.Getenv("S3_BUCKET_NAME"))),
 			Key:    aws.String(key),
-	})
+		})
 
 	return aws_buff.Bytes(), err
 }

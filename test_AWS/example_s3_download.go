@@ -19,7 +19,7 @@ func main() {
 	defer file.Close()
 
 	downloader := s3manager.NewDownloader(session.New(&aws.Config{
-		Region:      aws.String(os.Getenv("S3_REGION")),
+		Region: aws.String(os.Getenv("S3_REGION")),
 		// Credentials: credentials.NewStaticCredentials(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), ""),
 	}))
 

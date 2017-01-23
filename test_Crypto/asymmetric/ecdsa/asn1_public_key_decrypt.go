@@ -42,7 +42,7 @@ func main() {
 	max_len := len(X) - 1
 	for idx, value := range X {
 		shift_val := big.NewInt(0)
-		shift_val.Exp(big.NewInt(2), big.NewInt(int64((max_len - idx)*8)), nil)
+		shift_val.Exp(big.NewInt(2), big.NewInt(int64((max_len-idx)*8)), nil)
 
 		value_big := big.NewInt(0)
 		value_big.Mul(big.NewInt(int64(value)), shift_val)

@@ -9,8 +9,8 @@ import (
 	"io/ioutil"
 	"math/big"
 
-	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
 	"github.com/davecgh/go-spew/spew"
+	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
 )
 
 func main() {
