@@ -2,7 +2,7 @@ package main
 
 import (
 	"crypto/ecdsa"
-	"crypto/md5"
+	"crypto/sha256"
 	"fmt"
 	"hash"
 	"io"
@@ -22,8 +22,8 @@ func main() {
 
 	// Sign ecdsa style
 	var h hash.Hash
-	h = md5.New()
-	io.WriteString(h, "This is a message to be signed and verified by ECDSA!")
+	h = sha256.New()
+	io.WriteString(h, "abc")
 	signhash := h.Sum(nil)
 
 	signature_s_test, _ := ioutil.ReadFile(fixed_Ecdsa.FILE_S_PATH_TO_SAVE)
@@ -35,5 +35,5 @@ func main() {
 
 	// Verify
 	verifystatus := ecdsa.Verify(&pubkey, signhash, r_test, s_test)
-	fmt.Println(verifystatus) // should be true
+	fmt.Println("signature verify =>", verifystatus) // should be true
 }

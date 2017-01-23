@@ -5,8 +5,8 @@ package main
 import (
 	"bytes"
 	"crypto/ecdsa"
-	"crypto/md5"
 	"crypto/rand"
+	"crypto/sha256"
 	"fmt"
 	"hash"
 	"io"
@@ -18,10 +18,19 @@ import (
 	"test/test_Crypto/asymmetric/ecdsa/fixed_Ecdsa"
 )
 
+func reverse(bytes []byte) []byte {
+	newbytes := make([]byte, len(bytes))
+	for i, j := 0, len(bytes)-1; i < j; i, j = i+1, j-1 {
+		newbytes[i], newbytes[j] = bytes[j], bytes[i]
+	}
+	return newbytes
+}
+
 func printHex(mesg string, variable_type string, variable_name string, bytes []byte) {
 	fmt.Printf(mesg)
 
 	fmt.Printf("%s %s[] = {\r\n\t\t", variable_type, variable_name)
+
 	for idx, val := range bytes {
 		if (idx%8 == 0) && (idx != 0) {
 			fmt.Printf("\r\n\t\t")
@@ -68,11 +77,11 @@ func main() {
 
 	// Sign ecdsa style
 	var h hash.Hash
-	h = md5.New()
+	h = sha256.New()
 	r := big.NewInt(0)
 	s := big.NewInt(0)
 
-	io.WriteString(h, "This is a message to be signed and verified by ECDSA!")
+	io.WriteString(h, "abc")
 	signhash := h.Sum(nil)
 
 	r, s, serr := ecdsa.Sign(rand.Reader, privatekey, signhash)
