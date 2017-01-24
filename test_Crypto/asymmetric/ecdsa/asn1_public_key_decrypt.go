@@ -56,6 +56,10 @@ func main() {
 	printHex("Y []byte:\r\n\t", "u8", "y_pub", Y)
 
 	X_recal := big.NewInt(0)
+	Y_recal := big.NewInt(0)
+
+	// The X, Y []bytes array is encoding as "big endian": https://golang.org/pkg/math/big/#Int.Bytes
+	// So the first index is the biggest one
 	max_len := len(X) - 1
 	for idx, value := range X {
 		shift_val := big.NewInt(0)
@@ -69,6 +73,8 @@ func main() {
 	fmt.Printf("X recal=\r\n\t%#v\r\n", X_recal)
 	X_recal.SetBytes(X)
 	fmt.Printf("X SetBytes=\r\n\t%#v\r\n", X_recal)
+
+	fmt.Println("On curve =>", elliptic.P256().IsOnCurve(X_recal.SetBytes(X), Y_recal.SetBytes(Y)))
 }
 
 func getPublic(point []byte) (pub crypto.PublicKey, X []byte, Y []byte, err error) {
